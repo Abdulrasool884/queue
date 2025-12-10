@@ -1,9 +1,3 @@
-/* queue_array.c
-   Circular Queue Simulation (visual)
-   - Shows internal front/rear indices, buffer contents, wrap-around
-   Compile: gcc queue_array.c -o queue_array
-   Run: ./queue_array
-*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,23 +6,20 @@
 
 typedef struct {
     int data[Q_MAX];
-    int front;  // index of first element (valid if count>0)
-    int rear;   // index where next element will be inserted
-    int count;  // number of elements in queue
+    int front;  
+    int rear;   
+    int count;  
 } CircularQueue;
 
-/* initialize queue */
 void q_init(CircularQueue *q) {
     q->front = 0;
     q->rear = 0;
     q->count = 0;
 }
 
-/* check empty/full */
 int q_is_empty(const CircularQueue *q) { return q->count == 0; }
 int q_is_full(const CircularQueue *q) { return q->count == Q_MAX; }
 
-/* enqueue (returns 1 on success, 0 on overflow) */
 int q_enqueue(CircularQueue *q, int val) {
     if (q_is_full(q)) return 0;
     q->data[q->rear] = val;
@@ -37,7 +28,6 @@ int q_enqueue(CircularQueue *q, int val) {
     return 1;
 }
 
-/* dequeue (returns 1 on success, 0 on underflow) */
 int q_dequeue(CircularQueue *q, int *out) {
     if (q_is_empty(q)) return 0;
     *out = q->data[q->front];
@@ -46,14 +36,12 @@ int q_dequeue(CircularQueue *q, int *out) {
     return 1;
 }
 
-/* peek */
 int q_peek(const CircularQueue *q, int *out) {
     if (q_is_empty(q)) return 0;
     *out = q->data[q->front];
     return 1;
 }
 
-/* display internal state */
 void q_display(const CircularQueue *q) {
     printf("\n--- Circular Queue Internal State ---\n");
     printf("capacity = %d, count = %d\n", Q_MAX, q->count);
@@ -62,13 +50,12 @@ void q_display(const CircularQueue *q) {
     for (int i = 0; i < Q_MAX; ++i) {
         if (q->count > 0) {
             int occupied = 0;
-            // an index i is occupied if it lies within the queue contents
             if (q->front < q->rear) {
                 if (i >= q->front && i < q->rear) occupied = 1;
             } else if (q->front > q->rear) {
                 if (i >= q->front || i < q->rear) occupied = 1;
-            } else { // front == rear
-                if (q->count == Q_MAX) occupied = 1; // full
+            } else { 
+                if (q->count == Q_MAX) occupied = 1; 
             }
             if (occupied) {
                 printf(" [%2d] : %d", i, q->data[i]);
@@ -86,7 +73,6 @@ void q_display(const CircularQueue *q) {
     printf("-------------------------------------\n");
 }
 
-/* automatic demo that shows wrap-around */
 void auto_demo() {
     CircularQueue q;
     q_init(&q);
@@ -113,7 +99,6 @@ void auto_demo() {
     printf("\nAuto demo finished.\n");
 }
 
-/* interactive menu */
 void interactive() {
     CircularQueue q;
     q_init(&q);
